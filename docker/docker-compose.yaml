@@ -1,0 +1,24 @@
+# version: '3'
+# WARN[0000] ... the attribute `version` is obsolete, it will be ignored,
+# please remove it to avoid potential confusion
+services:
+  pgrest:
+    image: postgrest/postgrest
+    ports:
+      - "${PGREST_PORT:-3001}:3000"
+    environment:
+      PGRST_DB_URI: ${PG_URI:-postgres://app_user:password@db:5432/app_db}
+      PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3001
+    depends_on:
+      - pgdb
+  pgdb:
+    image: postgres
+    ports:
+      - "${PG_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: ${PG_DB:-app_db}
+      POSTGRES_USER: ${PG_USER:-app_user}
+      POSTGRES_PASSWORD: ${PG_PW:-password}
+  # Uncomment this if you want to persist the data.
+  # volumes:
+  #   - "./pgdata:/var/lib/postgresql/data"
