@@ -51,7 +51,7 @@ io.on("connection", (socket) => {
       "Added socketID, username, room to allUsers:"+
       `${socket.id}, ${username}, ${room}`
     );
-    chatRoomUsers = allUsers.filter((user) => user.room === room);
+    const chatRoomUsers = allUsers.filter((user) => user.room === room);
     socket.to(room).emit("chatroom_users", chatRoomUsers);
     socket.emit("chatroom_users", chatRoomUsers);
     console.log(`Updated users list for users in room ${room}`);
