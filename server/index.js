@@ -48,13 +48,25 @@ io.on("connection", (socket) => {
     chatRoom = room;
     allUsers.push({ id: socket.id, username, room });
     console.log(
-      "Added socketID, username, room to allUsers:"+
-      `${socket.id}, ${username}, ${room}`
+      "Added socketID, username, room to allUsers:" +
+        `${socket.id}, ${username}, ${room}`
     );
     const chatRoomUsers = allUsers.filter((user) => user.room === room);
     socket.to(room).emit("chatroom_users", chatRoomUsers);
     socket.emit("chatroom_users", chatRoomUsers);
     console.log(`Updated users list for users in room ${room}`);
+  });
+
+  socket.on("send_message", (data) => {
+    const { message, username, room, __createdtime__ } = data;
+    // Send to all users in room, including sender
+    io.in(room).emit("receive_message", data);
+    // Not bothering with this since I don't need to sign up
+    // For some proprietary crap to write to a DB...
+    // Will figure out Postgres later.
+    // harperSaveMessage(message, username, room, __createdtime__)
+    //   .then((response) => console.log(response))
+    //   .catch((err) => console.log(err));
   });
 });
 
