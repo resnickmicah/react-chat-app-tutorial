@@ -19,6 +19,6 @@ services:
       POSTGRES_DB: ${PG_DB:-app_db}
       POSTGRES_USER: ${PG_USER:-app_user}
       POSTGRES_PASSWORD: ${PG_PW:-password}
-  # Uncomment this if you want to persist the data.
-  # volumes:
-  #   - "./pgdata:/var/lib/postgresql/data"
+  # Uncomment volumes if you want to persist the data.
+    volumes:
+      - "./pgdata:/var/lib/postgresql/data"
