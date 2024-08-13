@@ -5,10 +5,12 @@ services:
   pgrest:
     image: postgrest/postgrest
     ports:
-      - "${PGREST_PORT:-3001}:3000"
+      - "${PGRST_PORT:-3001}:3000"
     environment:
-      PGRST_DB_URI: ${PG_URI:-postgres://app_user:password@db:5432/app_db}
+      PGRST_DB_URI: ${PGRST_DB_URI:-postgres://app_user:password@db:5432/app_db}
       PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3001
+      PGRST_DB_ANON_ROLE: ${PGRST_QUERY_ROLE:-web_anon}
+      PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMAS:-api}
     depends_on:
       - pgdb
   pgdb:
