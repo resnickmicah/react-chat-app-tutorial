@@ -13,7 +13,7 @@ const Messages = ({ socket }) => {
         {
           message: data.message,
           username: data.username,
-          __createdtime__: data.__createdtime__,
+          created: data.created,
         },
       ]);
     });
@@ -23,7 +23,7 @@ const Messages = ({ socket }) => {
   }, [socket]);
 
   // dd/mm/yyyy hh:mm:ss
-  const formatDate = (timestamp) => new Date(timestamp).toLocaleDateString();
+  const formatDate = (ISODateStr) => Date.parse(ISODateStr).toLocaleDateString();
 
   return (
     <div className={styles.messagesColumn}>
@@ -32,7 +32,7 @@ const Messages = ({ socket }) => {
           <div className={styles.msgInfo}>
             <span className={styles.msgMeta}>{msg.username}</span>
             <span className={styles.msgMeta}>
-              {formatDate(msg.__createdtime__)}
+              {formatDate(msg.created)}
             </span>
           </div>
           <p className={styles.msgText}>{msg.message}</p>

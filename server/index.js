@@ -32,19 +32,19 @@ io.on("connection", (socket) => {
     );
     socket.join(room);
 
-    let __createdtime__ = Date.now();
+    let created = (new Date()).toISOString();
     // Send notification to all users in room except joiner
     socket.to(room).emit("receive_message", {
       message: `${username} has joined the chat room`,
       username: CHAT_BOT,
-      __createdtime__,
+      created,
     });
 
     // Send welcome message to joiner
     socket.emit("receive_message", {
       message: `Welcome ${username}`,
       username: CHAT_BOT,
-      __createdtime__,
+      created,
     });
 
     // Save list of users in a chat room
