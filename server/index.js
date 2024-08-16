@@ -1,10 +1,11 @@
-import 'dotenv/config';
+import "dotenv/config";
 import express from "express";
 import http from "http";
 import cors from "cors";
 import { Server as SocketServer } from "socket.io";
 
-import pgSaveMessage from './services/pg-save-message.js';
+import pgSaveMessage from "./services/pg-save-message.js";
+import pgGetMessages from "./services/pg-get-messages.js";
 
 const CHAT_BOT = "ChatBot";
 let chatRoom = "";
@@ -32,17 +33,24 @@ io.on("connection", (socket) => {
     );
     socket.join(room);
 
-    let created = (new Date()).toISOString();
+    pgGetMessages(room)
+      .then((last100Messages) => {
+        // console.log('latest messages', last100Messages);
+        socket.emit("last_100_messages", last100Messages);
+      })
+      .catch((err) => console.log(err));
+
+    let created = new Date().toISOString();
     // Send notification to all users in room except joiner
     socket.to(room).emit("receive_message", {
-      message: `${username} has joined the chat room`,
+      msg: `${username} has joined the chat room`,
       username: CHAT_BOT,
       created,
     });
 
     // Send welcome message to joiner
     socket.emit("receive_message", {
-      message: `Welcome ${username}`,
+      msg: `Welcome ${username}`,
       username: CHAT_BOT,
       created,
     });
