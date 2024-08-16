@@ -11,6 +11,7 @@ services:
       PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3001
       PGRST_DB_ANON_ROLE: ${PGRST_QUERY_ROLE:-web_anon}
       PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMAS:-api}
+      PGRST_JWT_SECRET: ${PGRST_JWT_SECRET:-GenerateASecretWithDevUrandomSeeReadme}
     depends_on:
       - pgdb
   pgdb:
