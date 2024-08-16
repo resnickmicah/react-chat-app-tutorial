@@ -1,7 +1,10 @@
+import 'dotenv/config';
 import express from "express";
 import http from "http";
 import cors from "cors";
 import { Server as SocketServer } from "socket.io";
+
+import pgSaveMessage from './services/pg-save-message.js';
 
 const CHAT_BOT = "ChatBot";
 let chatRoom = "";
@@ -58,15 +61,12 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_message", (data) => {
-    const { message, username, room, __createdtime__ } = data;
+    const { message, username, room, created } = data;
     // Send to all users in room, including sender
     io.in(room).emit("receive_message", data);
-    // Not bothering with this since I don't need to sign up
-    // For some proprietary crap to write to a DB...
-    // Will figure out Postgres later.
-    // harperSaveMessage(message, username, room, __createdtime__)
-    //   .then((response) => console.log(response))
-    //   .catch((err) => console.log(err));
+    pgSaveMessage(message, username, room, created)
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
   });
 });
 

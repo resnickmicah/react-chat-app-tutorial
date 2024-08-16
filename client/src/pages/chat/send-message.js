@@ -6,13 +6,13 @@ const SendMessage = ({ socket, username, room }) => {
 
   const sendMessage = () => {
     if (message !== "") {
-      const __createdtime__ = Date.now();
+      const created = (new Date()).toISOString();
 
       // Send message to server.
       // We can't specify who we send the message to from the front end.
       // We can only send to server.
       // The server can then send message to the other users in the room.
-      socket.emit("send_message", { username, room, message, __createdtime__ });
+      socket.emit("send_message", { username, room, message, created });
       setMessage("");
     }
   };
