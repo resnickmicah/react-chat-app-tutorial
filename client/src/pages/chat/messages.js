@@ -23,7 +23,7 @@ const Messages = ({ socket }) => {
   }, [socket]);
 
   // dd/mm/yyyy hh:mm:ss
-  const formatDate = (ISODateStr) => Date.parse(ISODateStr).toLocaleDateString();
+  const formatDate = (ISODateStr) => new Date(ISODateStr).toLocaleDateString();
 
   return (
     <div className={styles.messagesColumn}>
