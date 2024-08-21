@@ -92,6 +92,23 @@ io.on("connection", (socket) => {
     });
     console.log(`${username} has left the chat`);
   });
+
+  socket.on('disconnect', (data) => {
+    const user = allUsers.find((user) => user.id == socket.id);
+    if (user?.username) {
+      const created = (new Date()).toISOString();
+      allUsers = leaveRoom(socket.id, allUsers);
+      socket.to(chatRoom).emit('chatroom_users', allUsers);
+      socket.to(chatRoom).emit('receive_message', {
+        username: CHAT_BOT,
+        msg: `${user.username} has disconnected from the chat.`,
+        created,
+      });
+      console.log(`${user.username} disconnected from the chat`);
+    } else {
+      console.error("Unknown user disconnected from the chat, cannot fire chatroom user event");
+    }
+  });
 });
 
 server.listen(4000, () => console.log("Server is running on port 4000"));
