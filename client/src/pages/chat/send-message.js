@@ -12,7 +12,7 @@ const SendMessage = ({ socket, username, room }) => {
       // We can't specify who we send the message to from the front end.
       // We can only send to server.
       // The server can then send message to the other users in the room.
-      socket.emit("send_message", { username, room, message, created });
+      socket.emit("send_message", { username, room, msg: message, created });
       setMessage("");
     }
   };

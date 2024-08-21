@@ -33,6 +33,14 @@
   margin-bottom: 12px;
 }
 
+.currentUserEntry {
+  font-weight: bold;
+}
+
+.usersListEntry {
+  font-weight: normal;
+}
+
 .messagesColumn {
   height: 85vh;
   overflow: auto;

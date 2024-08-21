@@ -6,6 +6,7 @@ import { Server as SocketServer } from "socket.io";
 
 import pgSaveMessage from "./services/pg-save-message.js";
 import pgGetMessages from "./services/pg-get-messages.js";
+import leaveRoom from './utils/leave-room.js';
 
 const CHAT_BOT = "ChatBot";
 let chatRoom = "";
@@ -69,13 +70,28 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_message", (data) => {
-    const { message, username, room, created } = data;
+    const { msg, username, room, created } = data;
     // Send to all users in room, including sender
     io.in(room).emit("receive_message", data);
-    pgSaveMessage(message, username, room, created)
+    pgSaveMessage(msg, username, room, created)
       .then((response) => console.log(response))
       .catch((err) => console.log(err));
   });
+
+  socket.on('leave_room', (data) => {
+    const { username, room } = data;
+    socket.leave(room);
+    const created = (new Date()).toISOString();
+
+    allUsers = leaveRoom(socket.id, allUsers);
+    socket.to(room).emit('chatroom_users', allUsers);
+    socket.to(room).emit('receive_message', {
+      username: CHAT_BOT,
+      msg: `${username} has left the chat`,
+      created,
+    });
+    console.log(`${username} has left the chat`);
+  });
 });
 
-server.listen(4000, () => "Server is running on port 4000");
+server.listen(4000, () => console.log("Server is running on port 4000"));
