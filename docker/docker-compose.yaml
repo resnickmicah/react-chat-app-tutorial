@@ -1,6 +1,3 @@
-# version: '3'
-# WARN[0000] ... the attribute `version` is obsolete, it will be ignored,
-# please remove it to avoid potential confusion
 services:
   pgrest:
     image: postgrest/postgrest
